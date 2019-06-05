@@ -87,7 +87,6 @@ void setup() {
      JsonObject& doc = jsonBuffer.parseObject(content);
 
     String alias = doc["alias"]; // Name of node
-    String chains_0_chain = doc["chains"][0]["chain"]; // "bitcoin"
     String num_active_channels = doc["num_active_channels"]; 
     String num_inactive_channels = doc["num_inactive_channels"]; 
     String num_peers = doc["num_peers"]; 
@@ -112,7 +111,7 @@ display.init(115200);
         
         display.setFont(&FreeSansBold9pt7b);
         display.println("");
-        display.println("Channels: " + num_active_channels + "/ -" + num_inactive_channels );
+        display.println("Channels: " + num_active_channels + "/-" + num_inactive_channels );
 
         display.println("Peers: " +  num_peers );
 
