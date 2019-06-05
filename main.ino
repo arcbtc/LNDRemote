@@ -16,7 +16,7 @@ const char*  server = "yournode.com";  // Server URL
 String readmacaroon = "Your read macaroon";
 String content = "";
 
-const char* test_root_ca = \   //TLS must be in this format
+const char* test_root_ca = \   //SSL must be in this format, SSL for the node can be exported from yournode.com:8077 in firefox
     "-----BEGIN CERTIFICATE-----\n" \
     "MIICBTCCAaqgAwIBAgIQBSMZ9g3niBo1jyzK1DvECDAKBggqhkjOPQQDAjAyMR8w\n" \
     "HQYDVQQKExZsbmQgYXV0b2dlbmVyYXRlZCBjZXJ0MQ8wDQYDVQQDEwZSb29tNzcw\n" \
