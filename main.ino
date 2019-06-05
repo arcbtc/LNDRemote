@@ -123,9 +123,10 @@ display.init(115200);
       }
      while (display.nextPage());{
       }
-
-     esp_sleep_enable_timer_wakeup(100000000);
-
+      
+     int secs = 60;
+     int microsecs = 1000000;
+     esp_sleep_enable_timer_wakeup(secs * microsecs);
      esp_deep_sleep_start();
 
    
