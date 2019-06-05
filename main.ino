@@ -13,7 +13,7 @@ const char* password = "yourssidpass"; // your network password
 
 const char*  server = "yournode.com";  // Server URL
 
-String readmacaroon = "Your read macaroon";
+String readmacaroon = "Your read macaroon as a string";
 String content = "";
 
 const char* test_root_ca = \   //SSL must be in this format, SSL for the node can be exported from yournode.com:8077 in firefox
