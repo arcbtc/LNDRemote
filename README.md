@@ -1,5 +1,5 @@
 
-![alt text](https://i.imgur.com/EYAM460.jpg)
+![alt text](https://i.imgur.com/R8oe677.jpg)
 
 # LNDRemote
 
