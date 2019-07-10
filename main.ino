@@ -1,6 +1,5 @@
-
 #include <WiFiClientSecure.h>
-#include <ArduinoJson.h> //Must be V5.3.0 (downgrade in Arduino IDE)
+#include <ArduinoJson.h> //You can use the latest version
 #include <GxEPD2_BW.h>
 
 #include <Fonts/FreeSansBold18pt7b.h>
@@ -8,25 +7,26 @@
 
 GxEPD2_BW<GxEPD2_154, GxEPD2_154::HEIGHT> display(GxEPD2_154(/*CS=5*/ SS, /*DC=*/ 17, /*RST=*/ 16, /*BUSY=*/ 4));
 
-const char* ssid     = "yourssid";     // your network SSID (name of wifi network)
-const char* password = "yourssidpass"; // your network password
+const char* ssid     = "YOUR-SSID";     // your network SSID (name of wifi network)
+const char* password = "YOUR-PASS"; // your network password
 
-const char*  server = "yournode.com";  // Server URL
+const char* server = "room77.raspiblitz.com";  // Server URL
+String host = "https://room77.raspiblitz.com:8077";
 
-String readmacaroon = "Your read macaroon as a string";
-String content = "";
+String readmacaroon = "YOUR-READ-MACAROON-AS-A_STRING";
+String line = "";
 
-const char* test_root_ca = \   //SSL must be in this format, SSL for the node can be exported from yournode.com:8077 in firefox
-    "-----BEGIN CERTIFICATE-----\n" \
+const char* test_root_ca =   //SSL must be in this format, SSL for the node can be exported from yournode.com:8077 in firefox
+     "-----BEGIN CERTIFICATE-----\n" \
     "MIICBTCCAaqgAwIBAgIQBSMZ9g3niBo1jyzK1DvECDAKBggqhkjOPQQDAjAyMR8w\n" \
     "HQYDVQQKExZsbmQgYXV0b2dlbmVyYXRlZCBjZXJ0MQ8wDQYDVQQDEwZSb29tNzcw\n" \
-    "HhAAAAAAAAAAAAAAAAAAAAGHBMCoskqHEP6AAAAAAAAA+OWZZHfUssdvExZsbmQg\n" \
+    "HhcNMTkwNTE2MjAwODUwWhcNMjAwNzEwMjAwODUwWjAyMR8wHQYDVQQKExZsbmQg\n" \
     "YXV0b2dlbmVyYXRlZCBjZXJ0MQ8wDQYDVQQDEwZSb29tNzcwWTATBgcqhkjOPQIB\n" \
-    "BggqhkjOPQMBBwNCAAQJ3795aca5YP6AaUtcvlSqopqR7ePzLshQoTUeV6FVKbFC\n" \
+    "BggqhkjOPQMBBwasdf;ijasbdf;adbf;akdfbas;dfbvasdfpqwQoTUeV6FVKbFC\n" \
     "CC+fVGRQsXJx+GVUknnNEcJTt/fQ9CmM6stqGPjAo4GhMIGeMA4GA1UdDwEB/wQE\n" \
     "AwICpDAPBgNVHRMBAf8EBTADAQH/MHsGA1UdEQR0MHKCBlJvb203N4IJbG9jYWxo\n" \
     "b3N0ghVyb29tNzcucmFzcGlibGl0ei5jb22CBHVuaXiCCnVuaXhwYWNrZXSHBH8A\n" \
-    "AAGHEAAAAAAAAAAAAAAAAAAAAAGHBMCoskqHEP6AAAAAAAAA+OWZZHfUV0qHBAAA\n" \
+    "AAGHEAAAAAAAADLIHFWQF====ewfqegfiqerogibfeqwdvllsdWZZHfUV0qHBAAA\n" \
     "AAAwCgYIKoZIzj0EAwIDSQAwRgIhALKz3oScii3i+5ltMVQc9u2O38rgfnGCj5Lh\n" \
     "u9iwcAiZAiEA0BjRcisPUlG+SE/s+x6/A2NuT0gtIZ3PKd/GuM5T0jM=\n" \
     "-----END CERTIFICATE-----\n";
@@ -59,16 +59,17 @@ void setup() {
     Serial.println("Connection failed!");
   else {
     Serial.println("Connected to server!");
-
-    client.println("GET https://yournode.com:8077/v1/getinfo HTTP/1.0");
-    client.println("Host: yournode.com:8077");
+    client.println("GET " + host + "/v1/getinfo HTTP/1.0");
     client.println("Grpc-Metadata-macaroon:" + readmacaroon );
     client.println("Connection: close");
     client.println();
 
     while (client.connected()) {
-      String line = client.readStringUntil('\n');
+      line = client.readStringUntil('\n');
+      Serial.println(line);
+
       if (line == "\r") {
+       Serial.println(line);
         Serial.println("headers received");
         break;
       }
@@ -80,11 +81,10 @@ void setup() {
 
     
      const size_t capacity = 2*JSON_ARRAY_SIZE(1) + JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(12) + 500;
-     DynamicJsonBuffer jsonBuffer(capacity);
+     DynamicJsonDocument doc(capacity);
 
-
+    deserializeJson(doc, content);
      
-     JsonObject& doc = jsonBuffer.parseObject(content);
 
     String alias = doc["alias"]; // Name of node
     String num_active_channels = doc["num_active_channels"]; 
@@ -122,7 +122,7 @@ display.init(115200);
       }
      while (display.nextPage());{
       }
-      
+      //send the ESP32 to sleep for a while to save power 0.04mah, useful for battery use
      int secs = 60;
      int microsecs = 1000000;
      esp_sleep_enable_timer_wakeup(secs * microsecs);
