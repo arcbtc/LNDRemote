@@ -11,3 +11,6 @@ GPIO maps for different ESP32 boards can be different, google images is your fri
 
 ![alt text](https://i.imgur.com/vqqfOeB.png)
 
+# Tip me
+If you like this project and might even use or extend it, why not send some tip love!
+https://paywall.link/to/f4e4e
